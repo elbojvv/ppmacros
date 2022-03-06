@@ -73,6 +73,7 @@ http://www.seanet.com/~karllunt/picmacro.htm).
 However, these for-next macros could not handle the
 two subquential loops inside another loops (written as
 BASIC statements):
+```
   for x=1 to 10
     for y=1 to 3
       statement
@@ -81,6 +82,7 @@ BASIC statements):
       statement
     next y
   next x
+```
 
 This problem was solved in these macros by using arrays in
 the MPASM compiler directives and expressions. Note: these
@@ -91,6 +93,7 @@ The example above has two nesting levels. For every level
 (depth) an own bookkeeping is performed. If we just look at
 the outer loop (over x), in some simple code, it would look
 as follow (with after remark the original code).
+```
   remark for x=1 to 10
   x=1
   lab_1_1:
@@ -100,6 +103,7 @@ as follow (with after remark the original code).
   x=x+1
   goto lab_1_1
   lab_1_2:
+```
 
 If in nesting-level 1, always a label "lab_1_x" is used, one
 only has to increase the last number to get everything right.
@@ -108,7 +112,7 @@ Now the subloop is nesting-level 2. The code for the first
 for-loop over y will roughly look the same as the code above.
 Now only 'lab_2_x' is used.
 The total code then will be:
-
+```
   remark for x=1 to 10
   x=1
   lab_1_1:
@@ -138,6 +142,7 @@ The total code then will be:
   x=x+1
   goto lab_1_1
   lab_1_2:
+```
 
 As can be seen, this will always work. The only thing needed
 is that for every nesting-level a variable has to be defined
@@ -150,7 +155,7 @@ statement "lab#v(a)" in a macro, while "a" has the value 4,
 will end up as "lab4" before the final compilation starts.
 Now one step deeper, lab4 itself could be a variable, if
 used in the right contect. The following code shows an array:
-
+```
   arr0 = .18
   arr1 = .26
   arr2 = .87
@@ -159,18 +164,20 @@ used in the right contect. The following code shows an array:
   lab#v(arr#v(i)):
   i+=1
   endw
-
+```
 This will produce the following text before the final
 compilation:
+```
   lab18:
   lab26:
   lab87:
+```
 
 This, just to indicate how to make arrays in MPASM.
 
 Since we now know how to make a for-next loop and use an array,
 let's look at the actual macro-code. The for_f_l_l macro is:
-
+```
  1:  for_f_l_l   macro           var1,lit1,lit2
  2:  cdep++
  3:              if cdep>mdep
@@ -183,6 +190,7 @@ let's look at the actual macro-code. The for_f_l_l macro is:
 10:  labcnt#v(cdep)++
 11:              gotoif_f_gt_l   var1,lit2,lab_#v(cdep)_#v(labcnt#v(cdep))
 12:              endm
+```
 
 cdep (current depth) contains the current nesting-level. mdep
 (maximum reached depth) is just used to initialise (put zero) if
@@ -202,12 +210,15 @@ labcnt1 is increased in line 10, since a for-loop needs two labels
 lab_1_2 is generated (as in the example).
 
 Now the next-code:
+```
 13:  next_f   macro           var1
 14:           incf            var1,f
 15:           goto            lab_#v(cdep)_#v(labcnt#v(cdep)-1)
 16:  lab_#v(cdep)_#v(labcnt#v(cdep)):
 17:  cdep--	
 18:           endm
+```
+
 Line 15 generates the label lab_1_1, since cdep equals 2 and is
 decresed by 1. This label jumps back to the 'for'-code. Line 16
 generates the label lab_1_2, which was needed in the 'for' code
