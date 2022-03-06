@@ -220,7 +220,7 @@ level 0.
 **************************************************************
 
 *** SYNTAX (load-statements):
-
+```
   load_x_y x,y
     Loads x with y
 
@@ -235,10 +235,10 @@ level 0.
      Loads bit1 of file1 with literal (lowest bit)
   load_f_b_f_b file1, bit1, file2, bit2
      Loads bit1 of file1 with bit2 of file2
-
+```
 
 *** SYNTAX (if-statements):
-
+```
   gotoif_x_ex_y file, $2, label
     $2: file, literal
     jumps to label if the expression is met
@@ -279,10 +279,10 @@ level 0.
     statements} 
   end_if
     Executes blocks depending on if bit (literal) of file is set (s) or clear (c)
-
+```
 
 *** SYNTAX (for-statements):
-
+```
   for_f_x_y register, start,  end
     statements
   next register
@@ -291,9 +291,10 @@ level 0.
 
   ford_f_x_y register, start,  end 
     counts down
+```
 
 *** SYNTAX (repeat and while-statements):
-
+```
   repeat
     statements
   until_x_ex_y
@@ -320,11 +321,10 @@ level 0.
 
   y: l, l8, l16, l32 - literal
      f, f8, f16, f32 - file (variable)
-       
+```       
 
 *** SYNTAX (Math):
-
-
+```
  add_x_y_z    x,y,z       ; z = x + y
  sub_x_y_z    x,y,z       ; z = x - y
  mul_x_y_z    x,y,z       ; z = x * y
@@ -337,4 +337,4 @@ level 0.
   y: l, l8, l16, l32 - literal (except l_l etc.)
      f, f8, f16, f32 - file (variable)
   z: f, f8, f16, f32 - file (variable)
-
+```
